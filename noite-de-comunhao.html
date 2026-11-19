@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#0e1118">
-  <title>Divisão da Confraternização</title>
+  <title>Noite de Comunhão</title>
 
   <style>
     :root {
@@ -208,7 +208,7 @@
 
   <header>
     <div>
-      <h1>Divisão da Confraternização</h1>
+      <h1>Noite de Comunhão</h1>
       <p>Distribua alimentos e bebidas entre as famílias e copie as mensagens prontas.</p>
     </div>
     <a href="index.html">← Gerador e Validador</a>
@@ -221,7 +221,7 @@
       <div class="card-title"><span class="icon">🎉</span>Evento</div>
 
       <label class="field">Nome do evento
-        <input type="text" id="evento" placeholder="Confraternização de fim de ano">
+        <input type="text" id="evento" value="Noite de Comunhão" placeholder="Noite de Comunhão">
       </label>
       <div class="two">
         <label class="field">Data <input type="date" id="data"></label>
@@ -288,7 +288,7 @@
 
 <script>
   const $ = (s, el = document) => el.querySelector(s);
-  const STORE = 'confraternizacao-v1';
+  const STORE = 'noite-de-comunhao-v1';
 
   const PADRAO_ALIMENTOS = ['Salgados', 'Bolo', 'Doces', 'Pão e frios', 'Salada', 'Arroz', 'Carne / churrasco', 'Farofa', 'Frutas'];
   const PADRAO_BEBIDAS = ['Refrigerante 2L', 'Suco', 'Água', 'Gelo'];
@@ -396,7 +396,7 @@ Contamos com vocês! Qualquer dúvida é só chamar. 🙏`;
       itens: todos.length ? todos.join('\n') : '• O que preferirem (fiquem à vontade!)',
       alimentos: f.alimentos.join(', '),
       bebidas: f.bebidas.join(', '),
-      evento: ev.evento || 'confraternização',
+      evento: ev.evento || 'Noite de Comunhão',
       data: ev.data,
       hora: ev.hora,
       local: ev.local,
@@ -411,7 +411,7 @@ Contamos com vocês! Qualquer dúvida é só chamar. 🙏`;
   }
 
   function resumoGeral(lista, ev){
-    const cab = [`*${ev.evento || 'Confraternização'}* – quem leva o quê`];
+    const cab = [`*${ev.evento || 'Noite de Comunhão'}* – quem leva o quê`];
     const info = [ev.data && `📅 ${ev.data}`, ev.hora && `⏰ ${ev.hora}`, ev.local && `📍 ${ev.local}`].filter(Boolean);
     if(info.length) cab.push(info.join('  '));
     const corpo = lista.map(f => {
