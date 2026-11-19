@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0e1118">
+  <title>Noite de Comunhão</title>
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e1118;
+      --card: #151a24;
+      --field: #0e1118;
+      --line: #252d3d;
+      --line-strong: #37425a;
+      --text: #e7ebf3;
+      --muted: #8e99ad;
+      --faint: #586479;
+      --accent: #8b9bff;
+      --accent-hover: #a3b0ff;
+      --accent-ink: #10142b;
+      --accent-soft: rgba(139, 155, 255, .12);
+      --ok: #5fd3a0;
+      --warn: #f5c26b;
+      --wa: #25d366;
+      --font: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1120px; margin: 0 auto; padding: 48px 20px 64px; }
+
+    header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 16px; flex-wrap: wrap; margin-bottom: 26px;
+    }
+    header h1 { font-size: 1.8rem; letter-spacing: -0.02em; line-height: 1.2; }
+    header p { color: var(--muted); margin-top: 6px; }
+    header a { color: var(--muted); font-size: .9rem; text-decoration: none; }
+    header a:hover { color: var(--accent); }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .card-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .card-title { font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .icon {
+      width: 32px; height: 32px; display: grid; place-items: center;
+      border-radius: 9px; background: var(--accent-soft); color: var(--accent);
+      font-size: 1rem; flex-shrink: 0;
+    }
+    .card-sub { color: var(--muted); font-size: .85rem; font-weight: 400; }
+
+    label.field { display: grid; gap: 6px; font-size: .85rem; color: var(--muted); font-weight: 600; }
+    label.field small { font-weight: 400; color: var(--faint); }
+
+    input[type=text], input[type=date], input[type=time], textarea {
+      width: 100%;
+      font: inherit;
+      font-size: .95rem;
+      color: var(--text);
+      background: var(--field);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      transition: border-color .15s;
+    }
+    input:hover, textarea:hover { border-color: var(--line-strong); }
+    input:focus, textarea:focus { border-color: var(--accent); outline: none; }
+    textarea { resize: vertical; min-height: 110px; line-height: 1.45; }
+    textarea.tpl { font-family: var(--mono); font-size: .85rem; min-height: 170px; }
+    input::placeholder, textarea::placeholder { color: var(--faint); }
+
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    button { font: inherit; cursor: pointer; transition: background .15s, border-color .15s, color .15s, transform .1s; }
+    button:active { transform: scale(.98); }
+    button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .small-btn {
+      height: 42px; padding: 0 18px; border: 0; border-radius: var(--radius-sm);
+      background: var(--accent); color: var(--accent-ink); font-weight: 700; white-space: nowrap;
+    }
+    .small-btn:hover { background: var(--accent-hover); }
+    .small-btn.full { width: 100%; }
+
+    .btn {
+      height: 36px; padding: 0 14px; border: 1px solid var(--line-strong);
+      border-radius: var(--radius-sm); background: transparent; color: var(--text);
+      font-weight: 600; white-space: nowrap; font-size: .9rem;
+      display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    }
+    .btn:hover { background: #1d2534; }
+    .btn.copied { color: var(--ok); border-color: rgba(95, 211, 160, .5); }
+    .btn.wa { color: var(--wa); border-color: rgba(37, 211, 102, .4); }
+    .btn.wa:hover { background: rgba(37, 211, 102, .08); }
+
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    details summary {
+      cursor: pointer; color: var(--muted); font-size: .85rem; font-weight: 600;
+      list-style: none; user-select: none;
+    }
+    details summary::before { content: "▸ "; }
+    details[open] summary::before { content: "▾ "; }
+    details > div { display: grid; gap: 8px; margin-top: 10px; }
+    .hint { color: var(--faint); font-size: .8rem; }
+    .hint code { font-family: var(--mono); color: var(--accent); background: var(--accent-soft); padding: 0 4px; border-radius: 4px; }
+
+    .switch { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: .9rem; cursor: pointer; user-select: none; }
+    .switch input { position: absolute; opacity: 0; pointer-events: none; }
+    .switch .track {
+      width: 34px; height: 20px; border-radius: 999px; background: var(--line);
+      border: 1px solid var(--line-strong); position: relative; transition: background .15s, border-color .15s;
+    }
+    .switch .track::after {
+      content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px;
+      border-radius: 50%; background: var(--muted); transition: transform .15s, background .15s;
+    }
+    .switch input:checked + .track { background: var(--accent-soft); border-color: var(--accent); }
+    .switch input:checked + .track::after { transform: translateX(14px); background: var(--accent); }
+    .switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    .results { display: grid; gap: 14px; }
+    .stats { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      font-size: .78rem; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+      border: 1px solid var(--line-strong); color: var(--muted);
+    }
+    .chip.warn { color: var(--warn); border-color: rgba(245, 194, 107, .5); background: rgba(245, 194, 107, .08); }
+
+    .msg {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--field);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+      animation: slideIn .2s ease;
+    }
+    .msg:hover { border-color: var(--line-strong); }
+    .msg-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .msg-head strong { font-size: 1rem; }
+    .msg-items { display: flex; gap: 6px; flex-wrap: wrap; }
+    .msg textarea { min-height: 120px; background: var(--card); font-size: .9rem; }
+    .msg.done { opacity: .55; }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(-4px); } }
+
+    .empty { color: var(--faint); text-align: center; padding: 40px 12px; border: 1px dashed var(--line-strong); border-radius: var(--radius-sm); }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0;
+      pointer-events: none; background: var(--card); border: 1px solid var(--line-strong); color: var(--text);
+      padding: 10px 18px; border-radius: 999px; font-weight: 600; font-size: .92rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.4); transition: opacity .2s, transform .2s; z-index: 10;
+      max-width: calc(100vw - 32px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .toast b { color: var(--ok); }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .container { padding: 28px 16px 48px; }
+      header h1 { font-size: 1.5rem; }
+      .card { padding: 16px; }
+      .two { grid-template-columns: 1fr; }
+      .msg-head .actions, .msg-head .actions .btn { width: 100%; }
+      .msg-head .actions .btn { flex: 1; justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <header>
+    <div>
+      <h1>Noite de Comunhão</h1>
+      <p>Distribua alimentos e bebidas entre as famílias e copie as mensagens prontas.</p>
+    </div>
+    <a href="index.html">← Gerador e Validador</a>
+  </header>
+
+  <div class="layout">
+
+    <!-- ===== Configuração ===== -->
+    <section class="card">
+      <div class="card-title"><span class="icon">🎉</span>Evento</div>
+
+      <label class="field">Nome do evento
+        <input type="text" id="evento" value="Noite de Comunhão" placeholder="Noite de Comunhão">
+      </label>
+      <div class="two">
+        <label class="field">Data <input type="date" id="data"></label>
+        <label class="field">Horário <input type="time" id="hora"></label>
+      </div>
+      <label class="field">Local
+        <input type="text" id="local" placeholder="Salão da igreja, casa da família Silva…">
+      </label>
+
+      <label class="field">Famílias <small>uma por linha</small>
+        <textarea id="familias" placeholder="Família Silva&#10;Família Souza&#10;Família Oliveira"></textarea>
+      </label>
+
+      <label class="field">Alimentos <small>um por linha</small>
+        <textarea id="alimentos"></textarea>
+      </label>
+
+      <label class="field">Bebidas <small>uma por linha</small>
+        <textarea id="bebidas"></textarea>
+      </label>
+
+      <label class="switch">
+        <input type="checkbox" id="embaralhar" checked>
+        <span class="track"></span>
+        Sortear (ordem aleatória)
+      </label>
+
+      <details>
+        <summary>Personalizar mensagem</summary>
+        <div>
+          <textarea id="modelo" class="tpl"></textarea>
+          <p class="hint">
+            Variáveis: <code>{familia}</code> <code>{itens}</code> <code>{alimentos}</code> <code>{bebidas}</code>
+            <code>{evento}</code> <code>{data}</code> <code>{hora}</code> <code>{local}</code>.
+            Linhas com variável vazia são removidas automaticamente.
+          </p>
+          <button class="btn" id="modelo-reset" type="button">Restaurar padrão</button>
+        </div>
+      </details>
+
+      <button class="small-btn full" id="gerar">Distribuir e gerar mensagens</button>
+    </section>
+
+    <!-- ===== Resultado ===== -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title"><span class="icon">💬</span>
+          <div>Mensagens <div class="card-sub" id="sub">Preencha ao lado e clique em distribuir.</div></div>
+        </div>
+        <div class="actions" id="acoes-gerais" hidden>
+          <button class="btn" id="copiar-resumo">Copiar lista geral</button>
+          <button class="btn" id="copiar-todas">Copiar todas</button>
+        </div>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="results" id="resultados">
+        <div class="empty">Nenhuma mensagem gerada ainda.</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const $ = (s, el = document) => el.querySelector(s);
+  const STORE = 'noite-de-comunhao-v1';
+
+  const PADRAO_ALIMENTOS = ['Salgados', 'Bolo', 'Doces', 'Pão e frios', 'Salada', 'Arroz', 'Carne / churrasco', 'Farofa', 'Frutas'];
+  const PADRAO_BEBIDAS = ['Refrigerante 2L', 'Suco', 'Água', 'Gelo'];
+  const PADRAO_MODELO =
+`Olá, {familia}! 😊
+
+Para a nossa *{evento}*, ficou combinado que vocês levarão:
+{itens}
+
+📅 Data: {data}
+⏰ Horário: {hora}
+📍 Local: {local}
+
+Contamos com vocês! Qualquer dúvida é só chamar. 🙏`;
+
+  const campos = ['evento', 'data', 'hora', 'local', 'familias', 'alimentos', 'bebidas', 'modelo'];
+
+  // ---------- Util ----------
+  let toastTimer;
+  function toast(msg){
+    const t = $('#toast');
+    t.innerHTML = 'Copiado: <b></b>';
+    $('b', t).textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 1600);
+  }
+
+  async function copiar(texto, btn, resumo){
+    try{
+      await navigator.clipboard.writeText(texto);
+    }catch{
+      const tmp = document.createElement('textarea');
+      tmp.value = texto;
+      document.body.appendChild(tmp);
+      tmp.select();
+      document.execCommand('copy');
+      tmp.remove();
+    }
+    toast(resumo);
+    if(btn){
+      const original = btn.dataset.label || btn.textContent;
+      btn.dataset.label = original;
+      btn.textContent = 'Copiado!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1200);
+    }
+  }
+
+  const linhas = (id) => $('#' + id).value.split('\n').map(s => s.trim()).filter(Boolean);
+
+  function embaralhar(arr){
+    const a = arr.slice();
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function formatarData(v){
+    if(!v) return '';
+    const [y, m, d] = v.split('-').map(Number);
+    const dt = new Date(y, m - 1, d);
+    const semana = dt.toLocaleDateString('pt-BR', { weekday: 'long' });
+    return `${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y} (${semana})`;
+  }
+
+  // ---------- Persistência ----------
+  function salvar(){
+    const dados = {};
+    campos.forEach(c => dados[c] = $('#' + c).value);
+    dados.embaralhar = $('#embaralhar').checked;
+    try{ localStorage.setItem(STORE, JSON.stringify(dados)); }catch{}
+  }
+
+  function carregar(){
+    let dados = {};
+    try{ dados = JSON.parse(localStorage.getItem(STORE)) || {}; }catch{}
+    $('#alimentos').value = PADRAO_ALIMENTOS.join('\n');
+    $('#bebidas').value = PADRAO_BEBIDAS.join('\n');
+    $('#modelo').value = PADRAO_MODELO;
+    campos.forEach(c => { if(typeof dados[c] === 'string') $('#' + c).value = dados[c]; });
+    if(typeof dados.embaralhar === 'boolean') $('#embaralhar').checked = dados.embaralhar;
+  }
+
+  // ---------- Distribuição ----------
+  // Itens são repartidos em rodízio: primeiro os alimentos, depois as bebidas
+  // continuando de onde parou, para que cada família fique com quantidade parecida.
+  function distribuir(familias, alimentos, bebidas, sortear){
+    const mapa = familias.map(nome => ({ nome, alimentos: [], bebidas: [] }));
+    const ordem = sortear ? embaralhar(mapa) : mapa;
+    const alim = sortear ? embaralhar(alimentos) : alimentos;
+    const beb  = sortear ? embaralhar(bebidas)  : bebidas;
+    let i = 0;
+    alim.forEach(item => ordem[i++ % ordem.length].alimentos.push(item));
+    beb.forEach(item  => ordem[i++ % ordem.length].bebidas.push(item));
+    return mapa; // na ordem digitada, para facilitar o envio
+  }
+
+  function montarMensagem(modelo, f, ev){
+    const todos = [...f.alimentos.map(a => '🍽️ ' + a), ...f.bebidas.map(b => '🥤 ' + b)];
+    const vars = {
+      familia: f.nome,
+      itens: todos.length ? todos.join('\n') : '• O que preferirem (fiquem à vontade!)',
+      alimentos: f.alimentos.join(', '),
+      bebidas: f.bebidas.join(', '),
+      evento: ev.evento || 'Noite de Comunhão',
+      data: ev.data,
+      hora: ev.hora,
+      local: ev.local,
+    };
+    return modelo
+      .split('\n')
+      .filter(l => !/\{(\w+)\}/.test(l) || [...l.matchAll(/\{(\w+)\}/g)].every(m => !(m[1] in vars) || vars[m[1]]))
+      .join('\n')
+      .replace(/\{(\w+)\}/g, (m, k) => k in vars ? vars[k] : m)
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
+  function resumoGeral(lista, ev){
+    const cab = [`*${ev.evento || 'Noite de Comunhão'}* – quem leva o quê`];
+    const info = [ev.data && `📅 ${ev.data}`, ev.hora && `⏰ ${ev.hora}`, ev.local && `📍 ${ev.local}`].filter(Boolean);
+    if(info.length) cab.push(info.join('  '));
+    const corpo = lista.map(f => {
+      const itens = [...f.alimentos, ...f.bebidas];
+      return `• *${f.nome}*: ${itens.length ? itens.join(', ') : 'à vontade'}`;
+    });
+    return [...cab, '', ...corpo].join('\n');
+  }
+
+  // ---------- Render ----------
+  let ultimo = null;
+
+  function gerar(){
+    const familias = linhas('familias');
+    const alimentos = linhas('alimentos');
+    const bebidas = linhas('bebidas');
+
+    if(!familias.length){
+      $('#familias').focus();
+      $('#resultados').innerHTML = '<div class="empty">Informe pelo menos uma família.</div>';
+      return;
+    }
+
+    const ev = {
+      evento: $('#evento').value.trim(),
+      data: formatarData($('#data').value),
+      hora: $('#hora').value ? $('#hora').value.replace(':', 'h') : '',
+      local: $('#local').value.trim(),
+    };
+
+    const lista = distribuir(familias, alimentos, bebidas, $('#embaralhar').checked);
+    const modelo = $('#modelo').value || PADRAO_MODELO;
+    ultimo = { lista, ev };
+
+    const total = alimentos.length + bebidas.length;
+    const semItem = lista.filter(f => !f.alimentos.length && !f.bebidas.length).length;
+    $('#sub').textContent = `${familias.length} família(s) · ${total} item(ns)`;
+    $('#stats').innerHTML = '';
+    const chip = (txt, cls = '') => { const c = document.createElement('span'); c.className = 'chip ' + cls; c.textContent = txt; $('#stats').appendChild(c); };
+    chip(`${alimentos.length} alimento(s)`);
+    chip(`${bebidas.length} bebida(s)`);
+    if(semItem) chip(`${semItem} família(s) sem item – adicione mais itens`, 'warn');
+
+    const box = $('#resultados');
+    box.innerHTML = '';
+    lista.forEach(f => {
+      const texto = montarMensagem(modelo, f, ev);
+      const card = document.createElement('div');
+      card.className = 'msg';
+      card.innerHTML = `
+        <div class="msg-head">
+          <strong></strong>
+          <div class="actions">
+            <button class="btn b-copy">Copiar</button>
+            <a class="btn wa" target="_blank" rel="noopener">WhatsApp</a>
+          </div>
+        </div>
+        <div class="msg-items"></div>
+        <textarea aria-label="Mensagem"></textarea>`;
+      $('strong', card).textContent = f.nome;
+      [...f.alimentos.map(a => '🍽️ ' + a), ...f.bebidas.map(b => '🥤 ' + b)].forEach(t => {
+        const c = document.createElement('span'); c.className = 'chip'; c.textContent = t; $('.msg-items', card).appendChild(c);
+      });
+      const ta = $('textarea', card);
+      ta.value = texto;
+      const wa = $('.wa', card);
+      const atualizarWa = () => wa.href = 'https://wa.me/?text=' + encodeURIComponent(ta.value);
+      const ajustar = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 2 + 'px'; };
+      atualizarWa();
+      ta.addEventListener('input', () => { atualizarWa(); ajustar(); });
+      $('.b-copy', card).addEventListener('click', e => {
+        copiar(ta.value, e.currentTarget, f.nome);
+        card.classList.add('done');
+      });
+      wa.addEventListener('click', () => card.classList.add('done'));
+      box.appendChild(card);
+      ajustar();
+    });
+
+    $('#acoes-gerais').hidden = false;
+    $('#gerar').textContent = 'Sortear novamente';
+    if(window.innerWidth <= 900) $('#resultados').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---------- Eventos ----------
+  carregar();
+  campos.forEach(c => $('#' + c).addEventListener('input', salvar));
+  $('#embaralhar').addEventListener('change', salvar);
+  $('#gerar').addEventListener('click', gerar);
+  $('#modelo-reset').addEventListener('click', () => { $('#modelo').value = PADRAO_MODELO; salvar(); });
+
+  $('#copiar-resumo').addEventListener('click', e => {
+    if(ultimo) copiar(resumoGeral(ultimo.lista, ultimo.ev), e.currentTarget, 'lista geral');
+  });
+  $('#copiar-todas').addEventListener('click', e => {
+    const textos = [...document.querySelectorAll('#resultados textarea')].map(t => t.value);
+    copiar(textos.join('\n\n——————————\n\n'), e.currentTarget, `${textos.length} mensagens`);
+  });
+</script>
+</body>
+</html>
